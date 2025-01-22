@@ -84,6 +84,8 @@ task-cli list in-progress
 Ensure you have Java installed (version 8 or higher).
 
 ```bash
-java -jar TaskTrackerCLI.jar
+java -jar target/TaskTrackerCLI-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
+
+#### Project based on https://roadmap.sh/projects/task-tracker
 
