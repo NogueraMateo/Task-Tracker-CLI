@@ -4,12 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.time.Instant;
 
 public class ActionManager {
-
-    private final String[] allowedActions = new String[] {
-            "add", "update", "delete", "mark-in-progress", "mark-done", "list", "--help"
-    };
 
     private final String[] allowedTaskStatuses = new String[] {
             "todo", "in-progress", "done"
@@ -95,6 +92,8 @@ public class ActionManager {
         JSONObject newTask = new JSONObject();
         newTask.put("name", task);
         newTask.put("status", "todo");
+        newTask.put("createdAt", Instant.now());
+        newTask.put("updatedAt", JSONObject.NULL);
         if (tasks.isEmpty()) {
             newTask.put("id", 1);
         } else {
@@ -134,6 +133,7 @@ public class ActionManager {
         for (int i = 0; i < tasks.length(); i++) {
             if (tasks.getJSONObject(i).getInt("id") == taskId) {
                 tasks.getJSONObject(i).put("name", newTaskName);
+                tasks.getJSONObject(i).put("updatedAt", Instant.now());
                 saveTasksJson(tasksJson);
                 return "Task updated successfully.";
             }
@@ -151,6 +151,7 @@ public class ActionManager {
         for (int i = 0; i < tasks.length(); i++) {
             if (tasks.getJSONObject(i).getInt("id") == taskId) {
                 tasks.getJSONObject(i).put("status", "done");
+                tasks.getJSONObject(i).put("updatedAt", Instant.now());
                 saveTasksJson(tasksJson);
                 return "Task marked as done successfully.";
             }
@@ -168,6 +169,7 @@ public class ActionManager {
         for (int i = 0; i < tasks.length(); i++) {
             if (tasks.getJSONObject(i).getInt("id") == taskId) {
                 tasks.getJSONObject(i).put("status", "in-progress");
+                tasks.getJSONObject(i).put("updatedAt", Instant.now());
                 saveTasksJson(tasksJson);
                 return "Task marked as in-progress successfully.";
             }
