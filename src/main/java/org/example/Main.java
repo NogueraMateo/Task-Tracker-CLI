@@ -84,12 +84,37 @@ public class Main {
                     System.out.println(actionManager.markTaskInProgress(taskId));
                     break;
 
+                case "list":
+
+                    if (inputArray.length < 3) {
+                        System.out.println("Usage: task-cli list <task-status>");
+                        break;
+                    }
+
+                    String taskStatus = inputArray[2];
+                    if (isValidTaskStatus(taskStatus)) {
+                        System.out.println(actionManager.listTasks(taskStatus));
+                    } else {
+                        System.out.println("Invalid task status");
+                    }
+                    break;
+
                 default:
                     System.out.println("Usage: task-cli --help");
                     break;
             }
-
         }
+    }
 
+
+    public static boolean isValidTaskStatus(String taskStatus) {
+        ActionManager actionManager = new ActionManager();
+        String[] taskStatuses = actionManager.getAllowedTaskStatuses();
+        for( String status : taskStatuses) {
+            if(status.equals(taskStatus)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
