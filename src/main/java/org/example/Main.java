@@ -86,12 +86,12 @@ public class Main {
 
                 case "list":
 
-                    if (inputArray.length < 3) {
-                        System.out.println("Usage: task-cli list <task-status>");
+                    if (inputArray.length > 3) {
+                        System.out.println("Usage: task-cli list OPTIONAL[<task-status>]");
                         break;
                     }
 
-                    String taskStatus = inputArray[2];
+                    String taskStatus = inputArray.length < 3 ? "all" : inputArray[2];
                     if (isValidTaskStatus(taskStatus)) {
                         System.out.println(actionManager.listTasks(taskStatus));
                     } else {

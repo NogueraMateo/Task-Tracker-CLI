@@ -9,7 +9,7 @@ import java.time.Instant;
 public class ActionManager {
 
     private final String[] allowedTaskStatuses = new String[] {
-            "todo", "in-progress", "done"
+            "todo", "in-progress", "done", "all"
     };
 
 
@@ -186,6 +186,13 @@ public class ActionManager {
         JSONObject task;
         JSONArray tasks = tasksJson.getJSONArray("tasks");
         StringBuilder output = new StringBuilder();
+
+        if (taskStatus.equals("all")) {
+            for (int i = 0; i < tasks.length(); i++) {
+                task = tasks.getJSONObject(i);
+                output.append(task.getString("name") +  " --- " + task.getString("status") + "\n");
+            }
+        }
 
         for (int i = 0; i < tasks.length(); i++) {
             task = tasks.getJSONObject(i);
