@@ -11,9 +11,18 @@ public class ActionManager {
             "add", "update", "delete", "mark-in-progress", "mark-done", "list", "--help"
     };
 
+    private final String[] allowedTaskStatuses = new String[] {
+            "todo", "in-progress", "done"
+    };
+
 
     public ActionManager() {
         createTasksFile();
+    }
+
+
+    public String[] getAllowedTaskStatuses() {
+        return allowedTaskStatuses;
     }
 
 
@@ -38,7 +47,6 @@ public class ActionManager {
 
 
     public JSONObject getTasksJson()
-    throws IOException, ClassNotFoundException
     {
         // Retrieve the file
         File file =  new File("./src/main/resources/data/tasks.json");
@@ -76,14 +84,9 @@ public class ActionManager {
 
 
     public String addTask(String task) {
-        JSONObject tasksJson = new JSONObject();
 
         // Get the existing json
-        try {
-            tasksJson = getTasksJson();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error reading tasks file.");
-        }
+        JSONObject tasksJson = getTasksJson();
 
         // Get the array of tasks if there is any
         JSONArray tasks = tasksJson.getJSONArray("tasks");
@@ -106,12 +109,10 @@ public class ActionManager {
 
 
     public String deleteTask(int taskId) {
-        JSONObject tasksJson = new JSONObject();
-        try {
-            tasksJson = this.getTasksJson();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error reading tasks file.");
-        }
+
+        // Get the existing json
+        JSONObject tasksJson = getTasksJson();
+
         JSONArray tasks = tasksJson.getJSONArray("tasks");
         for (int i = 0; i < tasks.length(); i++) {
             if (tasks.getJSONObject(i).getInt("id") == taskId) {
@@ -125,13 +126,9 @@ public class ActionManager {
 
 
     public String updateTask(int taskId, String newTaskName) {
-        JSONObject tasksJson = new JSONObject();
 
-        try {
-            tasksJson = this.getTasksJson();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error reading tasks file.");
-        }
+        // Get the existing json
+        JSONObject tasksJson = getTasksJson();
 
         JSONArray tasks = tasksJson.getJSONArray("tasks");
         for (int i = 0; i < tasks.length(); i++) {
@@ -146,13 +143,9 @@ public class ActionManager {
 
 
     public String markTaskDone(int taskId) {
-        JSONObject tasksJson = new JSONObject();
 
-        try {
-            tasksJson = this.getTasksJson();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error reading tasks file.");
-        }
+        // Get the existing json
+        JSONObject tasksJson = getTasksJson();
 
         JSONArray tasks = tasksJson.getJSONArray("tasks");
         for (int i = 0; i < tasks.length(); i++) {
@@ -167,13 +160,9 @@ public class ActionManager {
 
 
     public String markTaskInProgress(int taskId) {
-        JSONObject tasksJson = new JSONObject();
 
-        try {
-            tasksJson = this.getTasksJson();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error reading tasks file.");
-        }
+        // Get the existing json
+        JSONObject tasksJson = getTasksJson();
 
         JSONArray tasks = tasksJson.getJSONArray("tasks");
         for (int i = 0; i < tasks.length(); i++) {
@@ -184,5 +173,24 @@ public class ActionManager {
             }
         }
         return "Task not found.";
+    }
+
+
+    public String listTasks(String taskStatus) {
+
+        // Get the tasks json
+        JSONObject tasksJson = getTasksJson();
+
+        JSONObject task;
+        JSONArray tasks = tasksJson.getJSONArray("tasks");
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < tasks.length(); i++) {
+            task = tasks.getJSONObject(i);
+            if (task.getString("status").equals(taskStatus)) {
+                output.append(task.getString("name") +  " --- " + task.getString("status") + "\n");
+            }
+        }
+        return output.toString();
     }
 }
